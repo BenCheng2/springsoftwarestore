@@ -24,7 +24,18 @@ public class Product {
     @JoinColumn(name = "user_id")
     private User publisher;
 
-
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", subheader='" + subheader + '\'' +
+                ", product='" + product + '\'' +
+                ", firstYearPrice=" + firstYearPrice +
+                ", secondYearPrice=" + secondYearPrice +
+                ", publisher=" + publisher.getUsername() +
+                '}';
+    }
 }
 
 

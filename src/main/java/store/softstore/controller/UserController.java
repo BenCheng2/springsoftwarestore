@@ -4,8 +4,10 @@ import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import store.softstore.credential.UserCredential;
 import store.softstore.model.User;
 import store.softstore.repository.UserRepository;
 
@@ -25,13 +27,14 @@ public class UserController {
 
     // 测试登录，浏览器访问： http://localhost:8081/user/doLogin?username=zhang&password=123456
     @RequestMapping("doLogin")
-    public String doLogin(String username, String password) {
-        Optional<User> userOptional = userRepository.findUserByUsername(username);
+    public String doLogin(@RequestBody UserCredential userCredential) {
+        System.out.println("username: " + userCredential.username + " password: " + userCredential.password);
+        Optional<User> userOptional = userRepository.findUserByUsername(userCredential.username);
         if (userOptional.isEmpty()) {
             return "User not found";
         } else{
             User login_user = userOptional.orElse(new User());
-            if (login_user.getPassword().equals(password)){
+            if (login_user.getPassword().equals(userCredential.password)){
                 StpUtil.login(login_user.getId());
                 SaSession session = StpUtil.getTokenSession();
                 Long login_id = login_user.getId();

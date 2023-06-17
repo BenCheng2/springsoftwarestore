@@ -1,5 +1,6 @@
 package store.softstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,5 +33,6 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "publisher")
+    @JsonIgnore
     private List<Product> products;
 }
