@@ -24,15 +24,11 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    @SaCheckRole("ROLE_USER")
-    @GetMapping("")
+    @GetMapping("/getAllProducts")
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
-    @SaCheckRole("ROLE_USER")
-    @GetMapping("hi")
-    public boolean Hello (){
-        return StpUtil.isLogin();
-    }
+
+
 }

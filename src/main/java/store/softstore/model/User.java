@@ -15,10 +15,10 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class User  {
+public class User {
     @Id
     @GeneratedValue
-    @Column(name="id")
+    @Column(name = "id")
     private Long Id;
 
     private String username;
@@ -31,4 +31,6 @@ public class User  {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    @OneToMany(mappedBy = "publisher")
+    private List<Product> products;
 }

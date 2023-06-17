@@ -20,6 +20,10 @@ public class Product {
 
     private int secondYearPrice;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User publisher;
+
 
 }
 

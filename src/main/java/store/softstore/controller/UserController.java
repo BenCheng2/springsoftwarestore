@@ -3,19 +3,13 @@ package store.softstore.controller;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import store.softstore.model.Permission;
 import store.softstore.model.User;
 import store.softstore.repository.UserRepository;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/user/")
@@ -32,7 +26,7 @@ public class UserController {
     // 测试登录，浏览器访问： http://localhost:8081/user/doLogin?username=zhang&password=123456
     @RequestMapping("doLogin")
     public String doLogin(String username, String password) {
-        Optional<User> userOptional = userRepository.findIdByUsername(username);
+        Optional<User> userOptional = userRepository.findUserByUsername(username);
         if (userOptional.isEmpty()) {
             return "User not found";
         } else{
@@ -78,7 +72,7 @@ public class UserController {
 
     @RequestMapping("doRegister")
     public String register(String username, String password, String repassword, String email) {
-        Optional<User> userOptional = userRepository.findIdByUsername(username);
+        Optional<User> userOptional = userRepository.findUserByUsername(username);
         if (userOptional.isPresent()) {
             return "User already exists";
         } else{
