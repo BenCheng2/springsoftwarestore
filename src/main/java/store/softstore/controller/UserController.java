@@ -1,5 +1,6 @@
 package store.softstore.controller;
 
+import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 import lombok.AllArgsConstructor;
@@ -31,12 +32,22 @@ public class UserController {
     // 测试登录，浏览器访问： http://localhost:8081/user/doLogin?username=zhang&password=123456
     @RequestMapping("doLogin")
     public String doLogin(String username, String password) {
-        // 此处仅作模拟示例，真实项目需要从数据库中查询数据进行比对 
-        if("zhang".equals(username) && "123456".equals(password)) {
-            StpUtil.login(10001);
-            return "登录成功";
+        Optional<User> userOptional = userRepository.findIdByUsername(username);
+        if (userOptional.isEmpty()) {
+            return "User not found";
+        } else{
+            User login_user = userOptional.orElse(new User());
+            if (login_user.getPassword().equals(password)){
+                StpUtil.login(login_user.getId());
+                SaSession session = StpUtil.getTokenSession();
+                Long login_id = login_user.getId();
+                session.set("login_id", login_id);
+                return "Login success";
+            } else {
+                return "Login failure";
+            }
         }
-        return "登录失败";
+
     }
 
     // 查询登录状态，浏览器访问： http://localhost:8081/user/isLogin
@@ -54,8 +65,15 @@ public class UserController {
     // 测试注销  ---- http://localhost:8081/acc/logout
     @RequestMapping("logout")
     public SaResult logout() {
-        StpUtil.logout(10001);
-        return SaResult.ok();
+        if (StpUtil.isLogin()) {
+            SaSession session = StpUtil.getTokenSession();
+            Long login_id = session.getLong("login_id");
+            System.out.println(login_id);
+            StpUtil.logout(login_id);
+            return SaResult.data("Logout Success");
+        } else {
+            return SaResult.data("Not login");
+        }
     }
 
 

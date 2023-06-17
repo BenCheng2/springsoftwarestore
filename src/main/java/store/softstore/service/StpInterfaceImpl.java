@@ -2,6 +2,7 @@ package store.softstore.service;
 
 import cn.dev33.satoken.stp.StpInterface;
 import org.springframework.stereotype.Component;
+import store.softstore.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +35,9 @@ public class StpInterfaceImpl implements StpInterface {
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
         // 本list仅做模拟，实际项目中要根据具体业务逻辑来查询角色
-        List<String> list = new ArrayList<String>();    
-        list.add("admin");
-        list.add("super-admin");
+        User user = (User)loginId;
+        List<String> list = new ArrayList<String>();
+        list.add(user.getRole().toString());
         return list;
     }
 

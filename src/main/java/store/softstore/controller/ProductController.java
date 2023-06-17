@@ -1,6 +1,7 @@
 package store.softstore.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.stp.StpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,14 +24,13 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    @SaCheckLogin
+    @SaCheckRole("ROLE_USER")
     @GetMapping("")
     public List<Product> getAllProducts() {
         return productRepository.findAll();
-
     }
 
-    @SaCheckLogin
+    @SaCheckRole("ROLE_USER")
     @GetMapping("hi")
     public boolean Hello (){
         return StpUtil.isLogin();
