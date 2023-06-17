@@ -76,6 +76,30 @@ public class UserController {
         }
     }
 
+    @RequestMapping("doRegister")
+    public String register(String username, String password, String repassword, String email) {
+        Optional<User> userOptional = userRepository.findIdByUsername(username);
+        if (userOptional.isPresent()) {
+            return "User already exists";
+        } else{
+            // User does not exist, try to create a new user
+            // Check if the password matches
+            if (!password.equals(repassword)){
+                return "Password does not match";
+            }
+            // Check if the email is valid
+            // Create a new user
+            User new_user = new User();
+            new_user.setUsername(username);
+            new_user.setPassword(password);
+            new_user.setEmail(email);
+            userRepository.save(new_user);
+            return "Register success";
+        }
+
+    }
+
+
 
 
 }
