@@ -16,22 +16,10 @@ public class Product {
 
     private String product;
 
-    private String firstYearPrice;
+    private int firstYearPrice;
 
-    private String secondYearPrice;
+    private int secondYearPrice;
 
-    public Product(long id, String title, String subheader, String product, String firstYearPrice, String secondYearPrice) {
-        this.id = id;
-        this.title = title;
-        this.subheader = subheader;
-        this.product = product;
-        this.firstYearPrice = firstYearPrice;
-        this.secondYearPrice = secondYearPrice;
-    }
-
-    public Product() {
-
-    }
 
 }
 

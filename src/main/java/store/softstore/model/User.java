@@ -7,10 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class User  {
     @Id
     @GeneratedValue
@@ -23,5 +27,8 @@ public class User  {
 
     private String email;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
 }
