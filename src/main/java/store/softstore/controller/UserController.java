@@ -11,6 +11,7 @@ import store.softstore.credential.UserCredential;
 import store.softstore.model.User;
 import store.softstore.repository.UserRepository;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -36,9 +37,12 @@ public class UserController {
             User login_user = userOptional.orElse(new User());
             if (login_user.getPassword().equals(userCredential.password)){
                 StpUtil.login(login_user.getId());
+
                 SaSession session = StpUtil.getTokenSession();
                 Long login_id = login_user.getId();
                 session.set("login_id", login_id);
+                System.out.println("Login id: " + session.getLong("login_id"));
+
                 return "Login success";
             } else {
                 return "Login failure";
@@ -47,10 +51,37 @@ public class UserController {
 
     }
 
+    @RequestMapping("doLogin2")
+    public String doLogin(String username, String password) {
+        System.out.println("username: " + username + " password: " + password);
+        Optional<User> userOptional = userRepository.findUserByUsername(username);
+        if (userOptional.isEmpty()) {
+            return "User not found";
+        } else{
+            User login_user = userOptional.orElse(new User());
+            if (login_user.getPassword().equals(password)){
+                //StpUtil.login(login_user.getId());
+                StpUtil.login(1001);
+
+                return "Login success";
+            } else {
+                return "Login failure";
+            }
+        }
+
+    }
+
+
     // 查询登录状态，浏览器访问： http://localhost:8081/user/isLogin
     @RequestMapping("isLogin")
     public String isLogin() {
-        return "当前会话是否登录：" + StpUtil.isLogin();
+        //return "当前会话是否登录：" + StpUtil.isLogin();
+        return "当前会话是否登录：" + StpUtil.isLogin() + StpUtil.getTokenInfo()  ;
+    }
+
+    @RequestMapping("checkLogin")
+    public boolean checkLogin() {
+        return StpUtil.isLogin();
     }
 
     // 查询 Token 信息  ---- http://localhost:8081/acc/tokenInfo
@@ -66,6 +97,7 @@ public class UserController {
             SaSession session = StpUtil.getTokenSession();
             Long login_id = session.getLong("login_id");
             System.out.println(login_id);
+
             StpUtil.logout(login_id);
             return SaResult.data("Logout Success");
         } else {
@@ -94,6 +126,25 @@ public class UserController {
             return "Register success";
         }
 
+    }
+
+    @RequestMapping("getUserInfo")
+    public User getUserInfo() {
+        System.out.println(isLogin());
+        System.out.println(StpUtil.isLogin());
+        if (StpUtil.isLogin()) {
+            // User did login
+            SaSession session = StpUtil.getTokenSession();
+            Long login_id = session.getLong("login_id");
+            System.out.println("getUserInfo" + login_id);
+            Optional<User> userOptional = userRepository.findById(login_id);
+            return userOptional.orElse(null);
+        } else {
+            // User did not login
+            User user = new User();
+            user.setUsername("Not login");
+            return user;
+        }
     }
 
 
