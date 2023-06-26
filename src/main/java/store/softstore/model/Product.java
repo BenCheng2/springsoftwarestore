@@ -1,5 +1,6 @@
 package store.softstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,11 +21,15 @@ public class Product {
 
     private int secondYearPrice;
 
+    private int thirdYearPrice;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User publisher;
 
     @Override
+
     public String toString() {
         return "Product{" +
                 "id=" + id +

@@ -14,11 +14,10 @@ import java.util.Set;
 
 @Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private Long Id;
 
@@ -34,5 +33,15 @@ public class User {
 
     @OneToMany(mappedBy = "publisher")
     @JsonIgnore
-    private List<Product> products;
+    private List<Product> publishedProducts;
+
+    @ManyToMany
+    @JoinTable(
+            name = "purchase",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> purchasedProducts;
+
+
 }

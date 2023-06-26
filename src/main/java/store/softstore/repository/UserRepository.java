@@ -14,4 +14,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u where u.username = ?1")
     Optional<User> findUserByUsername(String username);
 
+    default boolean buyProduct(User user, Product product){
+        user.getPurchasedProducts().add(product);
+        save(user);
+        return true;
+    }
+
 }

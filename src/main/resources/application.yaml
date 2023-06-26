@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:mysql://localhost/softstore
-    username: root
-    password:
+    username: ben
+    password: 1234
 
   jpa:
     hibernate:
