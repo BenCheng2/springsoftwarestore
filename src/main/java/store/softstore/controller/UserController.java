@@ -33,7 +33,6 @@ public class UserController {
     // 测试登录，浏览器访问： http://localhost:8081/user/doLogin?username=zhang&password=123456
     @RequestMapping("doLogin")
     public String doLogin(@RequestBody LoginCredential loginCredential) {
-        System.out.println("username: " + loginCredential.username + " password: " + loginCredential.password);
         Optional<User> userOptional = userRepository.findUserByUsername(loginCredential.username);
         if (userOptional.isEmpty()) {
             return "User not found";
@@ -165,7 +164,7 @@ public class UserController {
             // User did login
             SaSession session = StpUtil.getTokenSession();
             Long login_id = session.getLong("login_id");
-            System.out.println("getUs   erInfo" + login_id);
+            System.out.println("getUserInfo" + login_id);
             Optional<User> userOptional = userRepository.findById(login_id);
 
             if (userOptional.isPresent()){
@@ -212,11 +211,9 @@ public class UserController {
             // User did login
             SaSession session = StpUtil.getTokenSession();
             Long login_id = session.getLong("login_id");
-            System.out.println("getUserInfo" + login_id);
             Optional<User> userOptional = userRepository.findById(login_id);
             if (userOptional.isPresent()){
                 User user = userOptional.orElse(new User());
-                System.out.println(user.getPurchasedProducts());
                 return user.getPublishedProducts();
             } else{
                 System.out.println("User does not exist but succeed to login");

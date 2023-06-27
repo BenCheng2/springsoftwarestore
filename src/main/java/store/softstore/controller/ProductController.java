@@ -1,5 +1,7 @@
 package store.softstore.controller;
 
+import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.stp.StpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,6 +57,12 @@ public class ProductController {
             new_product.setProduct(addProductCredential.product);
             new_product.setFirstYearPrice(addProductCredential.firstYearPrice);
             new_product.setSecondYearPrice(addProductCredential.secondYearPrice);
+
+            SaSession session = StpUtil.getTokenSession();
+            Long login_id = session.getLong("login_id");
+            System.out.println("Add product:" + login_id);
+            User publisher = userRepository.findUserById(login_id).get();
+            new_product.setPublisher(publisher);
             productRepository.save(new_product);
             return "Product create success";
         }
